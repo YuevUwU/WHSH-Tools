@@ -1,14 +1,15 @@
+from collections import namedtuple
 from enum import Enum
+from pprint import pprint
 
 import csv
+import json
 import re
+import requests
 
 DEBUG = False
 
-target = {
-    'Available': [],
-    'Unavailable': []
-}
+data = []
 
 
 # PEP8: `CapitalizedWords`` (or CapWords, or CamelCase – so named because of the bumpy look of its letters ^[4]). This is also sometimes known as StudlyCaps.
@@ -24,7 +25,7 @@ class URLType(Enum):
 # re.match() 只在字符串的开头位置检测匹配。
 # re.search() 在字符串中的任何位置检测匹配（这也是 Perl 在默认情况下所做的）
 # re.fullmatch() 检测整个字符串是否匹配
-def match_url(link: str) -> re.Match[str] | None:
+def _match_url(link: str) -> re.Match[str] | None:
     for t in URLType:
         result = t.value.match(link)
         if result is not None:
@@ -32,22 +33,30 @@ def match_url(link: str) -> re.Match[str] | None:
     return (None, None)
 
 
-with open('source.csv', 'r', encoding='utf_8') as f:
-    reader = csv.reader(f)
-    for row in reader:
-        if len(row) != 2:
-            raise TypeError(f"URL Match Process takes exactly 2 argument ({len(row)} given)")
-        name, link = row[0], row[1]
+def refresh_source():
+    with open('source.csv', 'r', encoding='utf_8') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            if len(row) != 2:
+                raise TypeError(f"URL Match Process takes exactly 2 argument ({len(row)} given)")
+            name, link = row[0], row[1]
 
-        if (name, link) == ('', ''):
-            continue
+            if (name, link) == ('', ''):
+                continue
 
-        # Skip if name with `!` prefix
-        if name[0] == '!':
-            continue
-        
-        t_name, result = match_url(link)
+            # Skip if name with `!` prefix
+            if name[0] == '!':
+                continue
+            
+            t_name, result = _match_url(link)
 
-        if DEBUG == True:
             if result is None:
-                print(f"Warning: URL is unavailable. (URL: {link})")
+                if DEBUG == True:
+                    print(f"Warning: URL is unavailable. (URL: {link})")
+            else: 
+                data.append(
+                        {"name": name, "link": link, "t_name": t_name, "uid": result}
+                    )
+    with open('data.json', 'w') as f:
+        json.dump(data, f)
+    return data
