@@ -3,6 +3,8 @@ from enum import Enum
 import csv
 import re
 
+DEBUG = False
+
 target = {
     'Available': [],
     'Unavailable': []
@@ -47,5 +49,6 @@ with open('source.csv', 'r', encoding='utf_8') as f:
         
         type, result = match_url(link)
 
-        if result is None:
-            print(f"Warning: URL is unavailable. (URL: {link})")
+        if DEBUG == True:
+            if result is None:
+                print(f"Warning: URL is unavailable. (URL: {link})")
