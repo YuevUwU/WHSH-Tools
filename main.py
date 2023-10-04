@@ -26,11 +26,10 @@ class URLType(Enum):
 # re.fullmatch() 检测整个字符串是否匹配
 def match_url(link: str) -> re.Match[str] | None:
     for t in URLType:
-        type = t.value
-        result = type.match(link)
+        result = t.value.match(link)
         if result is not None:
-            return type, result.group(1)
-    return None, None
+            return (t.name, result.group(1))
+    return (None, None)
 
 
 with open('source.csv', 'r', encoding='utf_8') as f:
@@ -47,7 +46,7 @@ with open('source.csv', 'r', encoding='utf_8') as f:
         if name[0] == '!':
             continue
         
-        type, result = match_url(link)
+        t_name, result = match_url(link)
 
         if DEBUG == True:
             if result is None:
