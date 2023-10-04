@@ -38,13 +38,14 @@ with open('source.csv', 'r', encoding='utf_8') as f:
             raise TypeError(f"URL Match Process takes exactly 2 argument ({len(row)} given)")
         name, link = row[0], row[1]
 
-        # Skip if name with `!` prefix
-        if name[0] == '!':
-            continue
-
         if (name, link) == ('', ''):
             continue
 
+        # Skip if name with `!` prefix
+        if name[0] == '!':
+            continue
+        
         type, result = match_url(link)
+
         if result is None:
             print(f"Warning: URL is unavailable. (URL: {link})")
