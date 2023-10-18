@@ -74,4 +74,8 @@ ENV/
 env.bak/
 venv.bak/
 
-data.json
+# IDE Settings
+.vscode/
+
+# generate data
+generated_data/

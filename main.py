@@ -33,8 +33,8 @@ def _match_url(link: str) -> re.Match[str] | None:
     return (None, None)
 
 
-def refresh_source():
-    with open('source.csv', 'r', encoding='utf_8') as f:
+def refresh_source(source_file="source.csv", output=False, output_file="generated_data/data.json"):
+    with open(source_file, 'r', encoding='utf_8') as f:
         reader = csv.reader(f)
         for row in reader:
             if len(row) != 2:
@@ -57,8 +57,9 @@ def refresh_source():
                 data.append(
                         {"name": name, "link": link, "t_name": t_name, "uid": result}
                     )
-    with open('data.json', 'w') as f:
-        json.dump(data, f)
+    if output:
+        with open(output_file, 'w') as f:
+            json.dump(data, f)
     return data
 
 
@@ -113,10 +114,18 @@ def _get_data_WID(uid, field = "time", order = "DESC", pageNum = 0, maxRows = 20
     return requests.post(url, data=param, timeout=timeout).json()
 
 
-def get_data(t_name, uid, field = "time", order = "DESC", pageNum = 0, maxRows = 20, keyword = "", flock = "-", tf = 1, auth_type = "user", timeout=60):
+def get_data(t_name, uid, field = "time", order = "DESC", pageNum = 0, maxRows = 20, keyword = "", flock = "-", tf = 1, auth_type = "user", timeout=60, output=False, output_file=None):
+    
+    if output and (output_file is not None):
+        output_file = f'generated_data/{uid}.json'
+    
     match t_name:
         case "WID":
             ret = _get_data_WID(uid, field, order, pageNum, maxRows, keyword, flock, tf, auth_type, timeout)
         case _:
             raise ValueError(f'Type {t_name} is currently unsupported')
+        
+    with open(output_file, 'w') as f:
+        json.dump(f, ret)
+    
     return ret
