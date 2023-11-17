@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "whsh-line-notify"
+version = "0.1.0"
+description = ""
+authors = ["YuevUwU <ericlsii2013@gmail.com>"]
+license = "CC BY-NC 3.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.12"
+
+[tool.poetry.group.dev.dependencies]
+line-bot-sdk = "^3.5.0"
+Flask = "^3.0.0"
+gunicorn = "^21.2.0"
+requests = "^2.31.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
