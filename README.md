@@ -1,10 +1,10 @@
-# WHSH Tools
-WHSH Tools是一個致力於整合與改進[文華高中](https://whsh.tc.edu.tw/)的多功能工具。
+# WHSH-Utilities
+**WHSH-Utilities**是一個致力於整合與改進[文華高中](https://whsh.tc.edu.tw/)的多功能工具。
 使用LINE Messaging API與LINE Notify開發
 ## TODO
 - [x] 公告API蒐集
 - [ ] 佈告欄通知 (公佈欄/報名)
-- [ ] RSS/ATOM feed
+- [ ] RSS/Atom feed
 - [ ] 行事曆整合
 - [ ] 課表整合
 - [ ] 校內路線規劃
